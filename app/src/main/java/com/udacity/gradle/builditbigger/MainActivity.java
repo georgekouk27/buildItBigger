@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -44,17 +45,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
+        new JokeAsyncTask(new JokeAsyncTask.JokeListener() {
+            @Override
+            public void onJokeResult(String joke) {
+                if (!joke.contains("java.net.")) {
+                    showJoke(joke);
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Error occured", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
-        Joker joker = new Joker();
-
-        String joke = joker.getJoke();
-
-        Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
-
+    public void showJoke(String joke) {
         Intent intent = new Intent(this, JokeActivity.class);
         intent.putExtra(JokeActivity.JOKE_INTENT, joke);
         startActivity(intent);
     }
-
 
 }
