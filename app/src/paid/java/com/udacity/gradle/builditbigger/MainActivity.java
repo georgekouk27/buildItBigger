@@ -7,16 +7,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import gr.georkouk.jokeactivity.JokeActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        progressBar = findViewById(R.id.progressBar);
     }
 
     @Override
@@ -42,9 +47,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
+        progressBar.setVisibility(View.VISIBLE);
+
         new JokeAsyncTask(new JokeAsyncTask.JokeListener() {
             @Override
             public void onJokeResult(String joke) {
+                progressBar.setVisibility(View.GONE);
+
                 if (!joke.contains("java.net.")) {
                     showJoke(joke);
                 }
