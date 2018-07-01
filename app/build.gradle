@@ -3,6 +3,8 @@ apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
 buildscript {
     repositories {
+        maven { url "https://maven.google.com" }
+        google()
         jcenter()
     }
     dependencies {
@@ -13,11 +15,12 @@ buildscript {
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
+    flavorDimensions "default"
 
     defaultConfig {
         applicationId "com.udacity.gradle.builditbigger"
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion 15
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -31,13 +34,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        paid{
+            applicationIdSuffix ".paid"
+        }
+        free{
+            applicationIdSuffix ".free"
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     endpointsServer project(path: ':backend', configuration: 'endpoints')
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.google.android.gms:play-services-ads:11.8.0'
     implementation 'com.google.api-client:google-api-client:1.23.0'
     implementation 'com.google.http-client:google-http-client-android:1.23.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.1'
@@ -50,4 +60,5 @@ dependencies {
 
     implementation project(':javaJokes')
     implementation project(':jokeactivity')
+    freeImplementation 'com.google.android.gms:play-services-ads:15.0.1'
 }
